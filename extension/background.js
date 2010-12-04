@@ -6,6 +6,19 @@
  * config['max_aliases'] number of aliases.
  */
 
+if( !localStorage.aliases ){
+  localStorage.aliases = JSON.stringify( [] );
+}
+if( !localStorage.config ){
+  localStorage.config = JSON.stringify({
+    "days": 7,
+    "uses": 10,
+    "max_aliases": 5,
+    "host": "tempalias.com"
+  });
+}
+
+
 function getAlias( config, callback ){
   $.getJSON( "http://" + config.host + "/aliases?callback=?", {
     "target": config.email,
@@ -28,7 +41,9 @@ function fetchAlias( callback ){
         aliases.shift();
       }
       localStorage.aliases = JSON.stringify( aliases );
-      if( callback )callback( );
+      if( callback ){
+        callback( );
+      }
     }else if( callback ){
       callback( { error: true } );
     }
@@ -37,9 +52,12 @@ function fetchAlias( callback ){
 
 function popEmail(){
   var config = JSON.parse( localStorage.config ),
-      aliases = JSON.parse( localStorage.aliases );
-  if( aliases.length === 0 ) return false;
-  var email = aliases.pop().aid + "@" + config.host;
+      aliases = JSON.parse( localStorage.aliases ),
+      email = null;
+  if( aliases.length === 0 ){
+    return false;
+  }
+  email = aliases.pop().aid + "@" + config.host;
   localStorage.aliases = JSON.stringify( aliases );  
   return email;
 }
@@ -47,8 +65,11 @@ function popEmail(){
 chrome.extension.onRequest.addListener( function( request, sender, response ){
   if( request.action === "getEmail" ){
     var email = popEmail();
-    if( email ) response( email );
-    else fetchAlias( function( error ){ response( popEmail() || "" ); });
+    if( email ){
+      response( email );
+    }else{
+      fetchAlias( function( error ){ response( popEmail() || "" ); });
+    }
   }else if( request.action === "fetchAlias" ){
     fetchAlias();
   }
@@ -66,16 +87,6 @@ chrome.contextMenus.create({
     }
   }, function(){
     var config = JSON.parse( localStorage.config );
-    if( !localStorage.aliases ) localStorage.aliases = JSON.stringify( [] );
-    if( !config ){
-      config = JSON.stringify({
-        "days" : 7,
-        "uses" : 10,
-        "max_aliases" : 5,
-        "host" : "tempalias.com"
-      });
-      localStorage.config = config;
-    }
     fetchAlias();
     setInterval( fetchAlias, 60*1000 );
 });

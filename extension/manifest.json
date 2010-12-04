@@ -1,6 +1,6 @@
 {
   "name" : "Temporary Email Alias",
-  "version" : "1",
+  "version" : "4",
   "description" : "Give out a limited use forwarding email by right clicking on the email field and keep those spammers at bay.",
   "options_page": "options.html",
   "background_page": "background.html",
