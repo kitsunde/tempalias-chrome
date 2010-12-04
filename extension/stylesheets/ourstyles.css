@@ -1,0 +1,17 @@
+#main{ width: auto; float: none; }
+.actions-bar{ overflow: hidden; }
+#credits{ display:none; }
+#main-navigation{
+  background-image: url("/images/menubar-background.png");
+}
+a.button, button.button{
+  background-image: url("/images/button-background.png");
+}
+a.button:active, button.button:active{
+  background-image: url("/images/button-background-active.png");
+}
+.form input.text_field{ width: 200px; }
+#header .logo{ margin-bottom: -15px; margin-right: 15px; }
+.left{ float:left; }
+.right{ margin-left: 230px; }
+#main .block{ padding-top: 10px; }
