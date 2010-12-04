@@ -80,10 +80,14 @@ chrome.contextMenus.create({
     title: 'Generate email',
     contexts: [ 'editable' ],
     onclick: function( clickData, tabId ){
-      chrome.tabs.executeScript( null, {
-        allFrames : true,
-        file: "input.js"
-      });
+      if( !JSON.parse( localStorage.config )['email'] ){
+        chrome.tabs.create( { url: "/options.html" } );
+      }else{
+        chrome.tabs.executeScript( null, {
+          allFrames : true,
+          file: "input.js"
+        });
+     }
     }
   }, function(){
     var config = JSON.parse( localStorage.config );
