@@ -6,9 +6,6 @@
  * config['max_aliases'] number of aliases.
  */
 
-if( !localStorage.aliases ){
-  localStorage.aliases = JSON.stringify( [] );
-}
 if( !localStorage.config ){
   localStorage.config = JSON.stringify({
     "days": 7,
@@ -16,8 +13,12 @@ if( !localStorage.config ){
     "max_aliases": 5,
     "host": "tempalias.com"
   });
+  chrome.tabs.create( { url: "/options.html" } );
 }
 
+if( !localStorage.aliases ){
+  localStorage.aliases = JSON.stringify( [] );
+}
 
 function getAlias( config, callback ){
   $.getJSON( "http://" + config.host + "/aliases?callback=?", {
