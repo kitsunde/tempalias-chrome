@@ -1,6 +1,6 @@
 {
   "name" : "Temporary Email Alias",
-  "version" : "5",
+  "version" : "6",
   "description" : "Give out a limited use forwarding email address by right clicking and keep those spammers at bay.",
   "options_page": "options.html",
   "background_page": "background.html",
@@ -9,5 +9,5 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": [ "contextMenus", "tabs", "http://*/*", "https://*/*" ]
+  "permissions": [ "contextMenus", "tabs", "notifications", "http://*/*", "https://*/*" ]
 }

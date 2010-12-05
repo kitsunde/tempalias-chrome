@@ -67,6 +67,17 @@ chrome.extension.onRequest.addListener( function( request, sender, response ){
       var email = aliases.pop().aid + "@" + config.host;
       fillAliases();
     }
+    if( !email ){
+      var notification = webkitNotifications.createNotification(
+        '/icons/icon48.png',
+        "Sorry, no temporary email available.",
+        "We generate new emails every minute and store up to " +
+        config.max_aliases + " for you to use at any one time." + 
+        " Perhaps you ran out?"
+      );
+      notification.show()
+      setTimeout( function(){ notification.cancel() }, 8000 );
+    }
     response( email || "" );
 
   }else if( request.action === "saveConfig" ){
@@ -85,6 +96,17 @@ chrome.contextMenus.create({
     title: 'Generate email',
     contexts: [ 'editable' ],
     onclick: function( clickData, tabId ){
+      if( tabId.url.indexOf( "https://chrome.google.com/extensions" ) === 0 ){
+        var notification = webkitNotifications.createNotification(
+          '/icons/icon48.png',
+          "Can't use extensions on this page.",
+          "For security reasons chrome won't let us paste an email on" +
+          "extension pages. :)"
+        );
+        notification.show()
+        setTimeout( function(){ notification.cancel() }, 8000 );
+      }
+      console.log( tabId );
       if( !JSON.parse( localStorage.config )['email'] ){
         chrome.tabs.create( { url: "/options.html" } );
       }else{
