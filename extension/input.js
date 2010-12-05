@@ -10,7 +10,7 @@ var activeElement = document.activeElement;
 if( window.frames.length > 0 && window.frames[0] !== undefined )
   console.log( "Bug 20773 is fixed! Please alert http://www.github.com/Celc" );
 
-/* Uncomment and amke sure script is only injected once when bug 20773 is fixed.
+/* Uncomment and make sure script is only injected once when bug 20773 is fixed.
 if( activeElement === document.body ){
   for( var i = 0; i < window.frames.length; ++i ){
     activeElement = frames[i].document.activeElement;
@@ -20,7 +20,6 @@ if( activeElement === document.body ){
 */
 if( activeElement !== document.body ){
   chrome.extension.sendRequest( { action : "getEmail" }, function( response ){
-    console.log( "acquired email:", response );
     activeElement.value += response;
   });
 }

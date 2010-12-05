@@ -13,11 +13,10 @@ $("form").live( "submit", function(){
   config.email = $("#email").val();
   config.uses = $("#uses").val();
   config.days = $("#days").val();
-  localStorage.config = JSON.stringify( config );
   $("<div class='flash'><div class='message notice'><p>Saved!</p></div></div>").prependTo(
     ".inner:visible"
   ).hide().fadeIn(1000, "swing").fadeOut(1000, "linear");
-  chrome.extension.sendRequest( { action : 'fetchAlias' } );
+  chrome.extension.sendRequest( { action : 'saveConfig', config: config } );
   return false;
 });
 
