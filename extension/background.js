@@ -100,13 +100,12 @@ chrome.contextMenus.create({
         var notification = webkitNotifications.createNotification(
           '/icons/icon48.png',
           "Can't use extensions on this page.",
-          "For security reasons chrome won't let us paste an email on" +
+          "For security reasons chrome won't let us paste an email on " +
           "extension pages. :)"
         );
         notification.show()
         setTimeout( function(){ notification.cancel() }, 8000 );
       }
-      console.log( tabId );
       if( !JSON.parse( localStorage.config )['email'] ){
         chrome.tabs.create( { url: "/options.html" } );
       }else{
