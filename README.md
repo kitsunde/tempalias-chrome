@@ -7,10 +7,12 @@ those pesky websites that you are only ever going to use once but requires a
 signup, and makes it possible to post contact details in a public setting
 without worrying about being spammed. :)
 
-Google users take notice
+GMail users take notice
 ========================
-Don't try to email your temporary address from the same gmail address as the
-temporary address or it will get undelivered.
+========================
+Don't email your temporary address from the same address as it's pointing to
+or it will get undelivered. If you really need to test it, just ask a friend to
+email you.
 
 License
 ============
