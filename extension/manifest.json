@@ -9,5 +9,17 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": [ "contextMenus", "tabs", "notifications", "http://*/*", "https://*/*" ]
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "notifications",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["keyboard.js"]
+    }
+  ]
 }

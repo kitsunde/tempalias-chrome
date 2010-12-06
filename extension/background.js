@@ -1,15 +1,20 @@
 /**
- * To avoid the roundtrip to America whenever we need an alias as we maintain a
- * buffer config['max_aliases'] aliases. It also allows us to get around the
- * rate limit on the service when we want to several addresses in quick
- * succession.
+ * To avoid the roundtrip to Switzerland whenever we need an alias as we 
+ * maintain a buffer config['max_aliases'] aliases. It also allows us to get
+ * around the rate limit on the service when we want to several addresses in
+ * quick succession.
  */
 if( !localStorage.config ){
   localStorage.config = JSON.stringify({
-    "days": 7,
-    "uses": 10,
-    "max_aliases": 5,
-    "host": "tempalias.com"
+    days: 7,
+    uses: 10,
+    max_aliases: 5,
+    host: "tempalias.com",
+    shortcut: {
+      shiftKey: true,
+      ctrlKey: true,
+      keyIdentifier: "U+0045" //e
+    }
   });
   chrome.tabs.create( { url: "/options.html" } );
 }
@@ -60,9 +65,9 @@ function getAlias( config, callback ){
   });
 }
 
-chrome.extension.onRequest.addListener( function( request, sender, response ){
-  var config = JSON.parse( localStorage.config );
-  if( request.action === "getEmail" ){
+var requestActions = {
+  getEmail: function( request, sender, response ){
+    var config = JSON.parse( localStorage.config );
     if( aliases.length > 0 ){
       var email = aliases.pop().aid + "@" + config.host;
       fillAliases();
@@ -78,9 +83,10 @@ chrome.extension.onRequest.addListener( function( request, sender, response ){
       notification.show()
       setTimeout( function(){ notification.cancel() }, 8000 );
     }
-    response( email || "" );
-
-  }else if( request.action === "saveConfig" ){
+    response( email || "" );    
+  },
+  saveConfig: function( request, sender, response ){
+    var config = JSON.parse( localStorage.config );
     for( key in request.config ){
       if( request.config[ key ] ) config[ key ] = request.config[ key ];
       else delete request.config[ key ];
@@ -88,7 +94,24 @@ chrome.extension.onRequest.addListener( function( request, sender, response ){
     localStorage.config = JSON.stringify( config );
     aliases = [];
     fillAliases();
+    if( response ) response( { success: true } );
+  },
+  getConfig: function( request, sender, response ){
+    var config = JSON.parse( localStorage.config );
+    response( config );
+  },
+  inputEmail: function( request, sender, response ){
+    chrome.tabs.executeScript( null, {
+      allFrames : true,
+      file: "input.js"
+    });  
+    if( response ) response( { success: true } );
   }
+}
+
+chrome.extension.onRequest.addListener( function( request, sender, response ){
+  if( !requestActions[request.action] ) response( { error: "No such action" } );
+  else requestActions[request.action].apply( this, arguments );
 });
 
 chrome.contextMenus.create({
@@ -109,11 +132,8 @@ chrome.contextMenus.create({
       if( !JSON.parse( localStorage.config )['email'] ){
         chrome.tabs.create( { url: "/options.html" } );
       }else{
-        chrome.tabs.executeScript( null, {
-          allFrames : true,
-          file: "input.js"
-        });
-     }
+        requestActions.inputEmail();
+      }
     }
   }, function(){
     fillAliases();
