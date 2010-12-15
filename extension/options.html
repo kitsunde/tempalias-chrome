@@ -30,16 +30,16 @@
                     <form class="form">
                       <div class="group">
                         <label for="email" class="label">Email</label>
-                        <input name="email"  class="text_field" id="email" />
+                        <input name="email"  type="email" class="text_field" id="email"  autofocus required />
                       </div>
                       <h3 class="title">Expires after</h3>
                       <div class="group">
                         <label for="days" class="label">Days</label>
-                        <input name="days" class="text_field" id="days" />
+                        <input name="days" type="number" min="1" class="text_field" id="days" required />
                       </div>
                       <div class="group">
                         <label for="uses" class="label">Emails received</label>
-                        <input name="uses"  class="text_field" id="uses" />
+                        <input name="uses" type="number" min="1" class="text_field" id="uses" required />
                       </div>
                       <div class="actions-bar">
                         <div class="actions-bar">
