@@ -1,7 +1,7 @@
 /**
  * To avoid the roundtrip to Switzerland whenever we need an alias as we 
  * maintain a buffer config['max_aliases'] aliases. It also allows us to get
- * around the rate limit on the service when we want to several addresses in
+ * around the rate limit on the service when we want several addresses in
  * quick succession.
  */
 if( !localStorage.config ){
