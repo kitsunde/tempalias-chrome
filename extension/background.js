@@ -71,6 +71,17 @@ function getAlias( config, success, error ){
   });
 }
 
+function showNotification( title, msg, icon, delay ){
+  icon = icon || 'icons/icon48.png';
+  delay = delay || 8000;
+  var notification = webkitNotifications.createNotification(
+    icon,
+    title,
+    msg);
+  notification.show()
+  setTimeout( function(){ notification.cancel() }, delay );
+}
+
 var requestActions = {
   getEmail: function( request, sender, response ){
     var config = JSON.parse( localStorage.config );
@@ -79,15 +90,11 @@ var requestActions = {
       fillAliases();
     }
     if( !email ){
-      var notification = webkitNotifications.createNotification(
-        '/icons/icon48.png',
+      showNotification(  
         "Sorry, no temporary email available.",
         "We generate new emails every minute and store up to " +
         config.max_aliases + " for you to use at any one time." + 
-        " Perhaps you ran out?"
-      );
-      notification.show()
-      setTimeout( function(){ notification.cancel() }, 8000 );
+        " Perhaps you ran out?");
     }
     response( email || "" );    
   },
