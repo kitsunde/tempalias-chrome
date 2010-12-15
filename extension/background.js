@@ -55,13 +55,19 @@ function fillAliases(){
   }
 }
 
-function getAlias( config, callback ){
-  $.getJSON( "http://" + config.host + "/aliases?callback=?", {
-    "target": config.email,
-    "max-usage": config.uses,
-    "days": config.days
-  }, function( response ){
-    callback( response );
+function getAlias( config, success, error ){
+  $.ajax({
+    url: "http://" + config.host + "/aliases",
+    type: "POST",
+    processData: false,
+    dataType: 'json',
+    contentType: "application/json",
+    data: JSON.stringify({
+      "target": config.email,
+      "max-usage": config.uses,
+      "days": config.days }),
+    success: success,
+    error: error
   });
 }
 
