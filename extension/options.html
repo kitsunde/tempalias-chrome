@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="stylesheets/ourstyles.css" type="text/css" />
     <script src="jquery-1.4.3.min.js"></script>
     <script src="options.js"></script>
+    <script type="text/javascript">
+    /* <![CDATA[ */
+        (function() {
+            var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+            
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+            
+            t.parentNode.insertBefore(s, t);
+        })();
+    /* ]]> */
+    </script>
   </head>
   <body>
     <div id="container">
@@ -17,6 +30,7 @@
           <ul class="wat-cf">
             <li><a href="#" class="active">Config</a></li>
             <li><a href="#">Credits</a></li>
+            <li><a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://chrome.google.com/extensions/detail/aehiejcjjljbfgfaioacdmeiphbcojod"></a></li>
           </ul>
         </div>
       </div>
@@ -53,15 +67,17 @@
                   </div>              
                   <div class="column right">
                     <h3>Hello there!</h3>
-                    <p>To get your temporary email address type in your email to
+                    <p>To get a temporary email address type in your email to
                     the left and press save, then right click in a field (on a
-                    normal webpage, not on this options page).</p>
-                    <p>A temporary email address is active only as long as your
-                    settings allows it to. So it will stay active until either
+                    normal webpage, not on this options page). Alternatively you
+                    can press <b>CTRL+SHIFT+E</b> to paste an email address.</p>
+                    <p>Each address you ask you'll receive a unique address that
+                    lasts only as long as your
+                    settings allows. So it will stay active until either
                     you've received a the maximum number of emails or
                     the maximum amount of time has been exeeded.</p>
-                    <p>You will get a unique temporary address each time you ask
-                    for one.</p>
+                    <p>If you found this software useful and want to add your
+                    support, click the flattr button up in the menu. :)</p>
                     <h4 class="title">Created by Kit Sunde</h4>
                     <p>I created this little extension after watching a
                     <a href="http://jsconfeu.blip.tv/file/4239619/">
@@ -77,6 +93,10 @@
                       ironically reachable through his real email
                       <a href="mailto:kitsunde@gmail.com">kitsunde@gmail.com</a>.
                     </p>
+                    <h4>You might also like</h4>
+                    <a href="https://www.dropbox.com/referrals/NTc5NDg3ODE5?src=global0">
+                      <img src="images/dropbox.png" />
+                    </a>
                   </div>
                 </div>
               </div>
