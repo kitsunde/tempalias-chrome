@@ -12,6 +12,6 @@ chrome.extension.sendRequest({ action: "getConfig" }, function( config ){
         return;
       }
     }
-    chrome.extension.sendRequest({ action: "inputEmail" });
+    chrome.extension.sendRequest({ action: "inputEmail", trigger: 'keyboard' });
   });
 });

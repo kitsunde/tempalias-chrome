@@ -12,6 +12,7 @@
     retry_attempts: 5,
     host: "tempalias.com",
     version: 7,
+    shortcuts: true,
     shortcut: {
       shiftKey: true,
       ctrlKey: true,
@@ -141,10 +142,7 @@ var requestActions = {
   },
   saveConfig: function( request, sender, response ){
     var config = JSON.parse( localStorage.config );
-    for( key in request.config ){
-      if( request.config[ key ] ) config[ key ] = request.config[ key ];
-      else delete request.config[ key ];
-    }
+    $.extend( true, config, request.config );
     localStorage.config = JSON.stringify( config );
     aliases = [];
     fillAliases();
@@ -155,6 +153,7 @@ var requestActions = {
     response( config );
   },
   inputEmail: function( request, sender, response ){
+    var config = JSON.parse( localStorage.config );
     chrome.tabs.executeScript( null, {
       allFrames : true,
       file: "input.js"
@@ -164,6 +163,11 @@ var requestActions = {
 }
 
 chrome.extension.onRequest.addListener( function( request, sender, response ){
+  var config = JSON.parse( localStorage.config );
+  if( request.trigger === 'keyboard' && !config.shortcuts ){
+    if( response ) response({ error: 'shortcuts disabled' });
+    return;
+  }
   if( !requestActions[request.action] ) response( { error: "No such action" } );
   else requestActions[request.action].apply( this, arguments );
 });
