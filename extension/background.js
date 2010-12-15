@@ -9,6 +9,7 @@ if( !localStorage.config ){
     days: 7,
     uses: 10,
     max_aliases: 5,
+    retry_attempts: 5,
     host: "tempalias.com",
     shortcut: {
       shiftKey: true,
@@ -36,21 +37,30 @@ setInterval( function(){
  */
 function fillAliases(){
   var config = JSON.parse( localStorage.config );
+  var retryAttempts = config.retry_attempts;
   if( !config.email || config.max_aliases === aliases.length )
     return;
   fetchAlias( config );
 
   var intervalId = setInterval( function(){
     var config = JSON.parse( localStorage.config );
-    if( !config.email || config.max_aliases === aliases.length )
+    if( !config.email ||
+        config.max_aliases === aliases.length ||
+        retryAttempts < 1 ){
       return clearInterval( intervalId );
+    }
     fetchAlias( config );
   }, 60*1000 );
   
   function fetchAlias( config ){
     if( !config.email ) return;
     getAlias( config, function( response ){
-      if( response.aid ) aliases.push( response );
+      if( response.aid ){
+        aliases.push( response );
+        retryAttempts = config.retry_attempts;
+      }
+    }, function( response ){
+      --retryAttempts;
     });
   }
 }
