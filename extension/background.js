@@ -4,29 +4,60 @@
  * around the rate limit on the service when we want several addresses in
  * quick succession.
  */
-if( !localStorage.config ){
-  localStorage.config = JSON.stringify({
+(function(){
+  var defaults = {
     days: 7,
     uses: 10,
     max_aliases: 5,
     retry_attempts: 5,
     host: "tempalias.com",
+    version: 7,
     shortcut: {
       shiftKey: true,
       ctrlKey: true,
       keyIdentifier: "U+0045" //e
     }
-  });
-  chrome.tabs.create( { url: "/options.html" } );
-}
+  };
+  var versions = [
+    {
+      version: 7,
+      msg: "Now has a keyboard shortcut CTRL+SHIFT+E." +
+        "You can go to the options page to disable it."
+    }
+  ];
+  if( !localStorage.config ){
+    localStorage.config = JSON.stringify( defaults );
+    chrome.tabs.create( { url: "/options.html" } );
+
+  }else{
+    var currentVersion = defaults.version;
+    var config = JSON.parse( localStorage.config );
+    var newConfig = $.extend( true, defaults, config );
+    if( !config.version ) config.version = 6;
+    var updatedConfig = defaults;
+    $.extend( true, updatedConfig, config );
+
+    versions.forEach( function( item ){
+      if( item.version <= config.version ) return;
+      showNotification( "New in version " + item.version, item.msg );
+    });
+    
+    updatedConfig.version = currentVersion;
+    
+    localStorage.config = JSON.stringify( updatedConfig );
+    
+  }
+})();
+
 var aliases = [];
+
 
 /**
  * Every 6 hours remove aliases older than 6 hours.
  */
 setInterval( function(){
   aliases = aliases.filter( function( alias ){
-      return 6*60*60*1000 > new Date() - new Date( alias.currentDate );
+    return 6*60*60*1000 > new Date() - new Date( alias.currentDate );
   });
   fillAliases();
 }, 6*60*60*1000 );
@@ -143,14 +174,10 @@ chrome.contextMenus.create({
     contexts: [ 'editable' ],
     onclick: function( clickData, tabId ){
       if( tabId.url.indexOf( "https://chrome.google.com/extensions" ) === 0 ){
-        var notification = webkitNotifications.createNotification(
-          '/icons/icon48.png',
+        showNofication(
           "Can't use extensions on this page.",
           "For security reasons chrome won't let us paste an email on " +
-          "extension pages. :)"
-        );
-        notification.show()
-        setTimeout( function(){ notification.cancel() }, 8000 );
+          "extension pages. :)");
       }
       if( !JSON.parse( localStorage.config )['email'] ){
         chrome.tabs.create( { url: "/options.html" } );
