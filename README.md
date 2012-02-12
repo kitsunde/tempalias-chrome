@@ -1,3 +1,6 @@
+This plugin no longer works as the service it relied on http://tempalias.com/
+has shut down. If anyone puts up another tempalias let me know.
+
 # Introduction
 This chrome plugin adds a right click context menu item for getting
 a forwarding, anonymous and temporary email address. This lets you avoid posting
